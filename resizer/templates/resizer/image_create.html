@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block breadcrumds %}
+    <a href="{% url 'image_list' %}">{% trans 'Back to list' %}</a>
+{% endblock breadcrumds %}
+
+{% block h1 %}
+    {% trans 'New image' %}
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button>{% trans 'Send' %}</button>
+    </form>
+{% endblock content %}

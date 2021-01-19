@@ -19,7 +19,7 @@ class SourceImage(models.Model):
 
     uploaded = models.DateTimeField(
         verbose_name=_('uploaded'),
-        auto_created=True,
+        auto_now_add=True,
     )
 
     image = models.ImageField(

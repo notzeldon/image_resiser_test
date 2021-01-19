@@ -16,6 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from resizer import views as resizer_views
+
 urlpatterns = [
+    # Можно вынести в resizer/urls.py, но нет смысла в мелком тестовом задании
+    path('', resizer_views.ImageListView.as_view(), name='image_list'),
+    path('detail/<int:pk>/', resizer_views.ImageDetailView.as_view(), name='image_detail'),
+
+    path('new/', resizer_views.ImageCreateView.as_view(), name='image_create'),
+    path('resize/<int:pk>/', resizer_views.ImageResizeView.as_view(), name='image_resize'),
+
     path('admin/', admin.site.urls),
 ]

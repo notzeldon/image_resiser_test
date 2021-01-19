@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block h1 %}
+    {% trans 'Image list' %}
+{% endblock %}
+
+{% block content %}
+    {% for object in object_list %}
+        <p>
+            <a href="{% url 'image_list' %}"></a>
+        </p>
+    {% empty %}
+        <p>{% trans 'No images available' %}</p>
+    {% endfor %}
+{% endblock content %}
