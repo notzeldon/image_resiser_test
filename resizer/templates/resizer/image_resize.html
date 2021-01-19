@@ -6,13 +6,10 @@
 {% endblock breadcrumds %}
 
 {% block h1 %}
-    {% trans 'New image' %}
+    {{ form.source.title }}
 {% endblock %}
 
 {% block content %}
-    {% with form.source.image.url as source_image_url %}
-        <img src="{{ source_image_url }}" alt="source">
-    {% endwith %}
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
@@ -20,4 +17,8 @@
         </table>
         <button>{% trans 'Send' %}</button>
     </form>
+
+    {% with form.source.image.url as source_image_url %}
+        <img src="{{ source_image_url }}" alt="source">
+    {% endwith %}
 {% endblock content %}

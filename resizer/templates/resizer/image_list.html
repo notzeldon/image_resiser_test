@@ -13,7 +13,8 @@
 
     {% for object in object_list %}
         <p>
-            <a href="{% url 'image_detail' object.pk %}">{{ object }}</a>
+            <a href="{% url 'image_detail' object.pk %}">{{ object }}</a> |
+            <a href="{% url 'image_resize' object.source_image.pk %}">{% trans 'Resize source image' %}</a>
         </p>
     {% empty %}
         <p>{% trans 'No images available' %}</p>

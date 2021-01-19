@@ -5,6 +5,10 @@
     {% trans 'Image' %} {{ object }}
 {% endblock %}
 
+{% block breadcrumds %}
+    <a href="{% url 'image_list' %}">{% trans 'Back to list' %}</a>
+{% endblock breadcrumds %}
+
 {% block content %}
     <p>
         {% trans 'Width' %}: {{ object.width }}
