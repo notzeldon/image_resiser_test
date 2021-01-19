@@ -1,5 +1,6 @@
 from django.core import validators
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -67,5 +68,7 @@ class ModifiedImage(models.Model):
     def __str__(self):
         return f'{self.source_image} [{self.width} x {self.height}]'
 
+    def get_absolute_url(self):
+        return reverse('image_detail', kwargs=dict(pk=self.pk))
 
 

@@ -1,4 +1,4 @@
-import math
+import math, os
 from io import BytesIO
 
 from PIL import Image
@@ -6,6 +6,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.temp import NamedTemporaryFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.translation import ugettext_lazy as _
 
 import requests
@@ -106,27 +107,31 @@ class ResizeImageModelForm(forms.ModelForm):
         cd['width'] = new_w
         cd['height'] = new_h
 
-        # Пробуем обработать изображение здесь
-        dot_pos = self.source.image.name.rfind('.')
-        file_format = self.source.image.name[dot_pos + 1:] if dot_pos + 1 < len(self.source.image.name) else 'png'
-        if file_format == 'jpg':
-            file_format = 'jpeg'
-
-        file_buffer = BytesIO()
-        im = Image.open(self.source.image.path)
-        im.resize((new_w, new_h))
-        try:
-            im.save(file_buffer, format=file_format.upper())
-            cd['buffer'] = file_buffer
-        except:
-            self.add_error('__all__', _('Cannot save new image'))
-            file_buffer.close()
-
         return cd
 
     def save(self, commit=True):
         obj = super().save(commit=False)
         obj.source_image = self.source
 
-        obj.image.save(name=self.source.image.name, content=ContentFile(self.cleaned_data['buffer'].read()))
-        self.cleaned_data['buffer'].close()
+        # Пробуем обработать изображение здесь
+        dot_pos = self.source.image.name.rfind('.')
+        file_format = self.source.image.name[dot_pos + 1:] if dot_pos + 1 < len(self.source.image.name) else 'png'
+        if file_format.lower() == 'jpg':
+            file_format = 'jpeg'
+
+        file_buffer = BytesIO()
+        im = Image.open(self.source.image.path)
+        im = im.resize((obj.width, obj.height))
+        try:
+            im.save(file_buffer, format=file_format.upper())
+        except Exception as e:
+            self.add_error('__all__', _('Cannot save new image'))
+
+        obj.image.save(
+            name=self.source.image.name[self.source.image.name.rfind(os.sep) + 1:],
+            content=ContentFile(file_buffer.getvalue()),
+            save=False,
+        )
+        obj.save()
+        file_buffer.close()
+        return obj

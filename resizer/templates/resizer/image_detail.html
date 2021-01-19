@@ -2,15 +2,15 @@
 {% load i18n %}
 
 {% block h1 %}
-    {% trans 'Image list' %}
+    {% trans 'Image' %} {{ object }}
 {% endblock %}
 
 {% block content %}
-    {% for object in object_list %}
-        <p>
-            <a href="{% url 'image_list' %}"></a>
-        </p>
-    {% empty %}
-        <p>{% trans 'No images available' %}</p>
-    {% endfor %}
+    <p>
+        {% trans 'Width' %}: {{ object.width }}
+    </p>
+    <p>
+        {% trans 'Height' %}: {{ object.height }}
+    </p>
+    <img src="{{ object.image.url }}" alt="image">
 {% endblock content %}

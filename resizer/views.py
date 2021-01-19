@@ -11,7 +11,7 @@ class ImageListView(generic.ListView):
     paginate_by = 50
 
 
-class ImageDetailView(generic.ListView):
+class ImageDetailView(generic.DetailView):
     model = models.ModifiedImage
     template_name = 'resizer/image_detail.html'
 
