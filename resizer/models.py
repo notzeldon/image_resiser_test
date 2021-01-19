@@ -67,3 +67,5 @@ class ModifiedImage(models.Model):
     def __str__(self):
         return f'{self.source_image} [{self.width} x {self.height}]'
 
+
+

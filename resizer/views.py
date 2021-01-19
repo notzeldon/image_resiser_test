@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.urls import reverse
 from django.views import generic
 
@@ -28,5 +29,15 @@ class ImageCreateView(generic.FormView):
 class ImageResizeView(generic.CreateView):
     form_class = forms.ResizeImageModelForm
     template_name = 'resizer/image_resize.html'
+
+    def get_form_kwargs(self):
+        try:
+            obj = models.SourceImage.objects.get(pk=self.kwargs['pk'])
+        except models.SourceImage.DoesNotExist:
+            raise Http404
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['source_image'] = obj
+        return form_kwargs
+
 
 
